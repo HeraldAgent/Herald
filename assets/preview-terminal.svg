@@ -1,0 +1,42 @@
+<svg width="720" height="460" viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg" font-family="'Cascadia Code','Fira Code','Courier New',monospace">
+  <rect width="720" height="460" rx="10" fill="#09090f"/>
+  <!-- window chrome -->
+  <rect width="720" height="36" rx="10" fill="#161622"/>
+  <rect y="22" width="720" height="14" fill="#161622"/>
+  <circle cx="18" cy="18" r="6" fill="#e05c5c"/>
+  <circle cx="38" cy="18" r="6" fill="#f5c842"/>
+  <circle cx="58" cy="18" r="6" fill="#27c93f"/>
+  <text x="300" y="23" fill="#555" font-size="11" text-anchor="middle">herald — news-to-trade signal engine</text>
+
+  <!-- content -->
+  <text x="20" y="60" fill="#f97316" font-size="12" font-weight="bold">⚡ Herald v0.1.0 starting...</text>
+  <text x="20" y="78" fill="#555" font-size="11">config loaded · tracked tokens: SOL BTC ETH JTO AAVE JUP</text>
+  <text x="20" y="96" fill="#555" font-size="11">scan interval: 5m · min confidence: 0.65 · signal TTL: 1h</text>
+
+  <text x="20" y="120" fill="#444" font-size="11">─────────────────────────────────────────────────────────────────</text>
+
+  <text x="20" y="140" fill="#27c93f" font-size="11">→ fetching CryptoPanic (hot, 20 items)...</text>
+  <text x="20" y="156" fill="#27c93f" font-size="11">→ fetching CoinDesk RSS (last 3h)...</text>
+  <text x="20" y="172" fill="#27c93f" font-size="11">→ fetching TheDefiant RSS (last 3h)...</text>
+  <text x="20" y="188" fill="#aaa" font-size="11">  fetched 47 raw items · deduped to 38 · filtered to 12 relevant</text>
+
+  <text x="20" y="212" fill="#444" font-size="11">─────────────────────────────────────────────────────────────────</text>
+
+  <text x="20" y="232" fill="#e0e0e0" font-size="11">passing 10 ranked items to signal agent...</text>
+  <text x="20" y="248" fill="#555" font-size="11">  [1/10] "Coinbase announces SOL spot ETF filing"           category=listing  sentiment=0.92</text>
+  <text x="20" y="264" fill="#555" font-size="11">  [2/10] "AAVE v3 exploit reported — $47M drained"          category=hack     sentiment=-0.88</text>
+  <text x="20" y="280" fill="#555" font-size="11">  [3/10] "Jito Labs raises $50M Series B led by a16z"       category=funding  sentiment=0.74</text>
+  <text x="20" y="296" fill="#555" font-size="11">  [4/10] "Fed holds rates steady — risk-on sentiment boost"  category=macro    sentiment=0.61</text>
+
+  <text x="20" y="320" fill="#444" font-size="11">─────────────────────────────────────────────────────────────────</text>
+
+  <text x="20" y="340" fill="#e0e0e0" font-size="11">signals generated this cycle: <tspan fill="#f97316" font-weight="bold">3</tspan></text>
+
+  <text x="20" y="362" fill="#27c93f" font-size="11">  ↑ BULLISH  SOL   conf=0.91  horizon=immediate  est=+18%  "Coinbase SOL ETF filing"</text>
+  <text x="20" y="378" fill="#e05c5c" font-size="11">  ↓ BEARISH  AAVE  conf=0.88  horizon=immediate  est=-22%  "AAVE v3 exploit $47M"</text>
+  <text x="20" y="394" fill="#27c93f" font-size="11">  ↑ BULLISH  JTO   conf=0.74  horizon=4h         est=+12%  "Jito $50M Series B"</text>
+
+  <text x="20" y="418" fill="#444" font-size="11">─────────────────────────────────────────────────────────────────</text>
+  <text x="20" y="438" fill="#555" font-size="11">next scan in 5m · active signals: 3 · press Ctrl+C to stop</text>
+  <text x="20" y="454" fill="#333" font-size="10">█</text>
+</svg>
