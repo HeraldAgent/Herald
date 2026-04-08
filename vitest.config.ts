@@ -5,6 +5,9 @@ export default defineConfig({
     globals: true,
     environment: "node",
     include: ["tests/**/*.test.ts"],
+    env: {
+      ANTHROPIC_API_KEY: "test-key",
+    },
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov"],
