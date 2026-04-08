@@ -8,5 +8,5 @@
   <text x="54" y="220" fill="#A6E1BE" font-family="Courier New, monospace" font-size="16">entry: buy only if the first post-headline breakout actually holds</text>
   <text x="54" y="254" fill="#E8F0F8" font-family="Courier New, monospace" font-size="16">risk: contamination rises fast once every outlet repeats the same story</text>
   <text x="54" y="302" fill="#6FD7C2" font-family="Courier New, monospace" font-size="18">---------------- Rejected ---------------------</text>
-  <text x="54" y="338" fill="#E8F0F8" font-family="Courier New, monospace" font-size="15">BONK rumor skipped | contamination 0.62 | no confirmed source chain</text>
+  <text x="54" y="338" fill="#E8F0F8" font-family="Courier New, monospace" font-size="15">BONK rumor skipped | contamination 0.62 | sourcing still too circular</text>
 </svg>

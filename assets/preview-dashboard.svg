@@ -2,7 +2,7 @@
   <rect width="960" height="520" fill="#F2EEE6"/>
   <rect x="28" y="24" width="904" height="472" rx="26" fill="#F8F5EF" stroke="#D8D0C4"/>
   <text x="56" y="72" fill="#243548" font-family="Arial, sans-serif" font-size="24" font-weight="700">Herald // Catalyst Tape</text>
-  <text x="56" y="98" fill="#7A7E83" font-family="Arial, sans-serif" font-size="13">surprise, half-life, contamination, tradeability</text>
+  <text x="56" y="98" fill="#7A7E83" font-family="Arial, sans-serif" font-size="13">surprise, half-life, contamination, and whether the tape is still early</text>
   <rect x="56" y="132" width="188" height="308" rx="18" fill="#F0E9D8" stroke="#D8D0C4"/>
   <text x="78" y="164" fill="#243548" font-family="Arial, sans-serif" font-size="15" font-weight="700">Fresh</text>
   <rect x="76" y="190" width="148" height="82" rx="14" fill="#FFFFFF" stroke="#D8D0C4"/>
