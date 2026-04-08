@@ -16,6 +16,13 @@ Catch the headlines that still have edge after the market sees them.
 
 Catalyst Board • Tape Ticket • Operating Surfaces • Real Edge • Technical Spec • Quick Start
 
+## At a Glance
+
+- `Use case`: convert crypto headlines into time-sensitive catalyst signals
+- `Primary input`: surprise, category half-life, contamination, freshness
+- `Primary failure mode`: promoting headlines after the edge has already been distributed
+- `Best for`: operators who need to know whether a story still has anything left to do
+
 ## Catalyst Board
 
 ![Herald catalyst board](assets/preview-dashboard.svg)
@@ -53,6 +60,18 @@ Herald should often do nothing.
 
 A silent tape is better than a noisy one that promotes dead edge.
 
+## How It Works
+
+Herald keeps the workflow simple:
+
+1. ingest fresh market headlines from the enabled feeds
+2. classify the event into a category with its own expected half-life
+3. measure surprise and contamination at the story level
+4. downgrade stories that are weakly sourced, recycled, or late
+5. rank the remaining catalysts into a tape the operator can actually act on
+
+The goal is not full news coverage. The goal is clean timing.
+
 ## How The Board Should Be Read
 
 ### Freshness
@@ -66,6 +85,21 @@ A genuinely surprising event can still matter after social media has seen it. A 
 ### Contamination
 
 This is where most junk gets filtered out. Rumor phrasing, anonymous sourcing, repetitive token stuffing, and social echo loops all raise contamination fast.
+
+## Example Output
+
+```text
+HERALD // CATALYST TAPE
+
+event            JUP fee vote passes
+category         governance
+surprise         high
+half-life        240m
+contamination    low
+state            actionable
+
+operator note: structural token-economics change still inside edge window
+```
 
 ## Technical Spec
 
@@ -110,6 +144,15 @@ This keeps strong structural catalysts above hype headlines.
 - governance or fee changes that affect token economics
 - hacks and security failures with immediate repricing impact
 - regulatory or macro headlines that change the market regime
+
+## Risk Controls
+
+- `half-life decay`: prevents stale headlines from staying live too long
+- `contamination score`: demotes rumor loops and low-quality social repetition
+- `category weighting`: keeps structural catalysts above low-value hype
+- `freshness requirement`: blocks late stories even when the headline sounds dramatic
+
+Herald should bias toward silence when timing is compromised. A dead catalyst with a strong headline is still dead.
 
 ## Why Operators Keep It Open
 
