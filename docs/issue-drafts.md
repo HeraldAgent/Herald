@@ -13,3 +13,5 @@ Title: `Half-life should decay faster when market is already in catalyst overloa
 
 Body:
 During heavy news days the tape should shorten edge assumptions. A regulation headline in a quiet market lives longer than a regulation headline during a full macro and exchange-news cascade. We need a market-wide event saturation factor.
+
+Backlog note: both items should be tested against clustered headline days, not just isolated samples.

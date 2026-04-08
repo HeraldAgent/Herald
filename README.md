@@ -3,6 +3,7 @@
 Catalyst tape for crypto market events.
 
 Herald scores whether a headline still has tradeable edge after publication. It focuses on surprise, event half-life, and contamination risk rather than generic sentiment labels.
+The system is designed to reject stories that are already over-distributed by the time they reach the terminal.
 
 [![Build](https://img.shields.io/github/actions/workflow/status/HeraldAgent/Herald/ci.yml?branch=master&style=flat-square&label=Build)](https://github.com/HeraldAgent/Herald/actions)
 ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)

@@ -10,3 +10,5 @@
 8. `docs(readme): add technical spec for catalyst ranking`
 9. `design(svg): add catalyst board and terminal ticket visuals`
 10. `chore(audit): add issue drafts and commit notes`
+
+Operational note: keep tape logic, feed parsing, and presentation changes in separate commits so the repo reads like an actual desk workflow.
