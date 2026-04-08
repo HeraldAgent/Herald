@@ -2,8 +2,13 @@
 
 Catalyst tape for crypto market events.
 
-Herald scores whether a headline still has tradeable edge after publication. It focuses on surprise, event half-life, and contamination risk rather than generic sentiment labels.
-The system is designed to reject stories that are already over-distributed by the time they reach the terminal.
+Catch the headlines that still have edge after the market sees them.
+
+`bun run dev`
+
+- watches surprise, event half-life, contamination risk, and category context
+- ignores recycled rumor loops, thin sourcing, and late social echo
+- promotes catalysts that are still early enough to matter to a trader
 
 [![Build](https://img.shields.io/github/actions/workflow/status/HeraldAgent/Herald/ci.yml?branch=master&style=flat-square&label=Build)](https://github.com/HeraldAgent/Herald/actions)
 ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
@@ -16,6 +21,13 @@ The system is designed to reject stories that are already over-distributed by th
 ## Tape Ticket
 
 ![Herald terminal](assets/preview-terminal.svg)
+
+## Operating Surfaces
+
+- `Catalyst Board`: organizes headlines by freshness, surprise, and contamination
+- `Tape Ticket`: prints the exact event, half-life, and action bias
+- `Decay Model`: tracks how fast each category loses edge after publication
+- `Contamination Filter`: blocks rumor loops and over-distributed stories from ranking too high
 
 ## Technical Spec
 
@@ -67,6 +79,13 @@ npm run dev
 
 - [Commit sequence](docs/commit-sequence.md)
 - [Issue drafts](docs/issue-drafts.md)
+
+## Support Docs
+
+- [Runbook](docs/runbook.md)
+- [Changelog](CHANGELOG.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security](SECURITY.md)
 
 ## License
 
