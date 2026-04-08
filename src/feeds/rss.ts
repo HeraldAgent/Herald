@@ -1,6 +1,5 @@
 import { createLogger } from "../lib/logger.js";
 import type { NewsItem, EventCategory } from "../lib/types.js";
-import { randomUUID } from "crypto";
 
 const logger = createLogger("rss");
 
@@ -86,10 +85,12 @@ function classifyCategory(title: string): EventCategory {
   const t = title.toLowerCase();
   if (t.includes("hack") || t.includes("exploit")) return "hack";
   if (t.includes("list")) return "listing";
-  if (t.includes("partner")) return "partnership";
+  if (t.includes("partner") || t.includes("integrat")) return "integration";
   if (t.includes("regulat") || t.includes("sec ")) return "regulation";
   if (t.includes("upgrade") || t.includes("launch")) return "upgrade";
   if (t.includes("fund") || t.includes("raise")) return "funding";
   if (t.includes("fed") || t.includes("inflation")) return "macro";
+  if (t.includes("unlock") || t.includes("vesting")) return "unlock";
+  if (t.includes("governance") || t.includes("vote") || t.includes("proposal")) return "governance";
   return "other";
 }

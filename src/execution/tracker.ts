@@ -13,12 +13,12 @@ export function addSignals(signals: TradeSignal[]) {
 
 export function expireOldSignals() {
   const now = Date.now();
-  const toExpire = activeSignals.filter((s) => now - s.generatedAt > config.SIGNAL_TTL_MS);
-  for (const s of toExpire) {
-    s.expired = true;
-    expiredSignals.push(s);
-    activeSignals.splice(activeSignals.indexOf(s), 1);
-    logger.debug(`Signal expired: ${s.token} ${s.direction}`);
+  const toExpire = activeSignals.filter((signal) => now - signal.generatedAt > config.SIGNAL_TTL_MS);
+  for (const signal of toExpire) {
+    signal.expired = true;
+    expiredSignals.push(signal);
+    activeSignals.splice(activeSignals.indexOf(signal), 1);
+    logger.debug(`Signal expired: ${signal.token} ${signal.direction}`);
   }
 }
 
@@ -28,14 +28,14 @@ export function getActiveSignals(): TradeSignal[] {
 }
 
 export function getSignalStats() {
-  const all = [...activeSignals, ...expiredSignals];
+  const allSignals = [...activeSignals, ...expiredSignals];
   return {
     active: activeSignals.length,
     expired: expiredSignals.length,
-    bullish: all.filter((s) => s.direction === "bullish").length,
-    bearish: all.filter((s) => s.direction === "bearish").length,
-    avgConfidence: all.length > 0
-      ? all.reduce((s, sig) => s + sig.confidence, 0) / all.length
+    bullish: allSignals.filter((signal) => signal.direction === "bullish").length,
+    bearish: allSignals.filter((signal) => signal.direction === "bearish").length,
+    avgConfidence: allSignals.length > 0
+      ? allSignals.reduce((sum, signal) => sum + signal.confidence, 0) / allSignals.length
       : 0,
   };
 }
@@ -43,15 +43,15 @@ export function getSignalStats() {
 export function printSignalBoard() {
   const active = getActiveSignals();
   if (active.length === 0) {
-    logger.info("No active signals");
+    logger.info("No active catalyst signals");
     return;
   }
 
-  logger.info("─── Active Signals ───────────────────────────────");
-  for (const s of active.sort((a, b) => b.confidence - a.confidence)) {
-    const arrow = s.direction === "bullish" ? "↑" : "↓";
-    const age = Math.round((Date.now() - s.generatedAt) / 60000);
-    logger.info(`  ${arrow} ${s.token.padEnd(8)} ${s.direction.toUpperCase().padEnd(8)} conf=${s.confidence.toFixed(2)} ${s.timeHorizon.padEnd(10)} ${age}m ago`);
-    logger.info(`     ${s.entryNotes}`);
+  logger.info("─── Active Catalyst Tape ─────────────────────────────");
+  for (const signal of active.sort((left, right) => right.confidence - left.confidence)) {
+    const arrow = signal.direction === "bullish" ? "↑" : signal.direction === "bearish" ? "↓" : "→";
+    const age = Math.round((Date.now() - signal.generatedAt) / 60000);
+    logger.info(`  ${arrow} ${signal.token.padEnd(8)} ${signal.direction.toUpperCase().padEnd(8)} conf=${signal.confidence.toFixed(2)} half-life=${signal.eventHalfLifeMinutes}m contam=${signal.contaminationScore.toFixed(2)} age=${age}m`);
+    logger.info(`     ${signal.entryNotes}`);
   }
 }

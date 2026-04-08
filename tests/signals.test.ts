@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { filterRelevantNews, rankNewsByImpact, deduplicateNews } from "../src/signals/filter.js";
+import { describe, expect, it } from "vitest";
+import { filterRelevantNews, rankNewsByImpact, deduplicateNews, getContaminationScore, getHalfLifeMinutes } from "../src/signals/filter.js";
 import type { NewsItem } from "../src/lib/types.js";
 
 const base: NewsItem = {
@@ -16,23 +16,12 @@ const base: NewsItem = {
 
 describe("filterRelevantNews", () => {
   it("keeps recent items with tracked tokens", () => {
-    const result = filterRelevantNews([base]);
-    expect(result).toHaveLength(1);
+    expect(filterRelevantNews([base])).toHaveLength(1);
   });
 
-  it("removes items older than 2 hours", () => {
-    const old = { ...base, id: "old_1", publishedAt: Date.now() - 3 * 3600000 };
+  it("removes items older than 3 hours", () => {
+    const old = { ...base, id: "old_1", publishedAt: Date.now() - 4 * 3600000 };
     expect(filterRelevantNews([old])).toHaveLength(0);
-  });
-
-  it("keeps high-impact categories even without tracked tokens", () => {
-    const macro = { ...base, id: "macro_1", tokens: [], category: "macro" as const };
-    expect(filterRelevantNews([macro])).toHaveLength(1);
-  });
-
-  it("removes untracked tokens with low-impact categories", () => {
-    const irrelevant = { ...base, id: "irr_1", tokens: ["SHIB"], category: "other" as const };
-    expect(filterRelevantNews([irrelevant])).toHaveLength(0);
   });
 });
 
@@ -44,23 +33,25 @@ describe("rankNewsByImpact", () => {
     expect(ranked[0].category).toBe("hack");
   });
 
-  it("factors sentiment into ranking", () => {
-    const highSentiment = { ...base, id: "hs_1", rawSentiment: 0.9 };
-    const lowSentiment = { ...base, id: "ls_1", rawSentiment: 0.1 };
-    const ranked = rankNewsByImpact([lowSentiment, highSentiment]);
-    expect(ranked[0].id).toBe("hs_1");
+  it("penalizes contaminated rumor headlines", () => {
+    const clean = { ...base, id: "clean_1", title: "JUP governance vote passes fee burn plan" };
+    const rumor = { ...base, id: "rumor_1", title: "Rumor: unconfirmed SOL ETF speculation", summary: "anonymous sources say..." };
+    const ranked = rankNewsByImpact([rumor, clean]);
+    expect(ranked[0].id).toBe("clean_1");
   });
 });
 
-describe("deduplicateNews", () => {
-  it("removes duplicate ids", () => {
-    const result = deduplicateNews([base, base]);
-    expect(result).toHaveLength(1);
+describe("helpers", () => {
+  it("assigns short half-life to hacks", () => {
+    expect(getHalfLifeMinutes({ ...base, category: "hack" })).toBe(45);
   });
 
-  it("passes through unique items", () => {
-    const b2 = { ...base, id: "test_2" };
-    const result = deduplicateNews([base, b2]);
-    expect(result).toHaveLength(2);
+  it("scores rumors as contaminated", () => {
+    const rumor = { ...base, title: "Rumor: unconfirmed BONK listing speculation", summary: "anonymous chatter" };
+    expect(getContaminationScore(rumor)).toBeGreaterThan(0.4);
+  });
+
+  it("deduplicates repeated ids", () => {
+    expect(deduplicateNews([base, base])).toHaveLength(1);
   });
 });

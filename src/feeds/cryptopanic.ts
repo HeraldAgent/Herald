@@ -1,7 +1,6 @@
 import { createLogger } from "../lib/logger.js";
 import { config } from "../lib/config.js";
 import type { NewsItem, EventCategory } from "../lib/types.js";
-import { randomUUID } from "crypto";
 
 const logger = createLogger("cryptopanic");
 const BASE = "https://cryptopanic.com/api/v1";
@@ -36,7 +35,7 @@ export async function fetchCryptoPanicNews(limit = 50): Promise<NewsItem[]> {
 
     const res = await fetch(`${BASE}/posts/?${params}`);
     if (!res.ok) throw new Error(`CryptoPanic ${res.status}`);
-    const data: CPResponse = await res.json();
+    const data = await res.json() as CPResponse;
 
     return (data.results ?? []).slice(0, limit).map((p) => {
       const tokens = (p.currencies ?? []).map((c) => c.code.toUpperCase());
@@ -68,12 +67,12 @@ function classifyCategory(title: string): EventCategory {
   const t = title.toLowerCase();
   if (t.includes("hack") || t.includes("exploit") || t.includes("stolen")) return "hack";
   if (t.includes("list") || t.includes("trading pair")) return "listing";
-  if (t.includes("partner") || t.includes("integrat")) return "partnership";
+  if (t.includes("partner") || t.includes("integrat")) return "integration";
   if (t.includes("regulat") || t.includes("sec ") || t.includes("ban")) return "regulation";
   if (t.includes("upgrade") || t.includes("v2") || t.includes("launch")) return "upgrade";
   if (t.includes("fund") || t.includes("raise") || t.includes("million")) return "funding";
   if (t.includes("fed") || t.includes("cpi") || t.includes("inflation") || t.includes("rate")) return "macro";
-  if (t.includes("liquidat")) return "liquidation";
-  if (t.includes("whale") || t.includes("large transfer")) return "whale";
+  if (t.includes("unlock") || t.includes("vesting")) return "unlock";
+  if (t.includes("governance") || t.includes("vote") || t.includes("proposal")) return "governance";
   return "other";
 }

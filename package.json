@@ -2,6 +2,15 @@
   "name": "herald",
   "version": "0.1.0",
   "description": "News-to-trade signal engine — scans crypto news and generates actionable trade signals using Claude",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HeraldAgent/Herald.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HeraldAgent/Herald/issues"
+  },
+  "homepage": "https://github.com/HeraldAgent/Herald#readme",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {

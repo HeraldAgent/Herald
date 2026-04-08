@@ -1,15 +1,15 @@
 export type NewsSource = "cryptopanic" | "rss" | "twitter" | "coindesk" | "theblock";
 export type SignalDirection = "bullish" | "bearish" | "neutral";
 export type EventCategory =
-  | "partnership"
   | "listing"
   | "hack"
   | "regulation"
   | "upgrade"
   | "funding"
   | "macro"
-  | "liquidation"
-  | "whale"
+  | "governance"
+  | "unlock"
+  | "integration"
   | "other";
 
 export interface NewsItem {
@@ -19,9 +19,9 @@ export interface NewsItem {
   source: NewsSource;
   url: string;
   publishedAt: number;
-  tokens: string[];           // mentioned token symbols
+  tokens: string[];
   category: EventCategory;
-  rawSentiment: number;       // -1 to +1 from source metadata
+  rawSentiment: number;
 }
 
 export interface TradeSignal {
@@ -30,24 +30,15 @@ export interface TradeSignal {
   headline: string;
   token: string;
   direction: SignalDirection;
-  confidence: number;         // 0-1
-  expectedMovesPct: number;   // estimated price impact %
+  confidence: number;
+  expectedMovesPct: number;
   timeHorizon: "immediate" | "1h" | "4h" | "24h";
+  eventHalfLifeMinutes: number;
+  surpriseScore: number;
+  contaminationScore: number;
   rationale: string;
   entryNotes: string;
   riskNotes: string;
   generatedAt: number;
   expired: boolean;
-}
-
-export interface NewsSignalPair {
-  news: NewsItem;
-  signal: TradeSignal;
-}
-
-export interface ScanCycle {
-  startedAt: number;
-  itemsScanned: number;
-  signalsGenerated: number;
-  topSignal?: TradeSignal;
 }

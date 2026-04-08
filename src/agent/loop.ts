@@ -4,6 +4,7 @@ import { createLogger } from "../lib/logger.js";
 import type { NewsItem, TradeSignal } from "../lib/types.js";
 import { HERALD_SYSTEM } from "./prompts.js";
 import { randomUUID } from "crypto";
+import { getContaminationScore, getHalfLifeMinutes } from "../signals/filter.js";
 
 const logger = createLogger("agent");
 const client = new Anthropic({ apiKey: config.ANTHROPIC_API_KEY });
@@ -16,7 +17,7 @@ const tools: Anthropic.Tool[] = [
   },
   {
     name: "get_token_context",
-    description: "Returns basic context for a token — recent trend, market cap tier, volatility",
+    description: "Returns basic context for a token",
     input_schema: {
       type: "object" as const,
       properties: { symbol: { type: "string" } },
@@ -25,19 +26,16 @@ const tools: Anthropic.Tool[] = [
   },
   {
     name: "get_similar_past_events",
-    description: "Returns historical examples of similar news events and their price impact",
+    description: "Returns historical examples of similar catalyst paths",
     input_schema: {
       type: "object" as const,
-      properties: {
-        category: { type: "string" },
-        token: { type: "string" },
-      },
+      properties: { category: { type: "string" }, token: { type: "string" } },
       required: ["category"],
     },
   },
   {
     name: "submit_signal",
-    description: "Submit a trading signal generated from a news event",
+    description: "Submit a trading signal generated from a catalyst event",
     input_schema: {
       type: "object" as const,
       properties: {
@@ -48,12 +46,12 @@ const tools: Anthropic.Tool[] = [
         confidence: { type: "number" },
         expectedMovesPct: { type: "number" },
         timeHorizon: { type: "string", enum: ["immediate", "1h", "4h", "24h"] },
+        surpriseScore: { type: "number" },
         rationale: { type: "string" },
         entryNotes: { type: "string" },
         riskNotes: { type: "string" },
       },
-      required: ["newsId", "headline", "token", "direction", "confidence",
-        "expectedMovesPct", "timeHorizon", "rationale", "entryNotes", "riskNotes"],
+      required: ["newsId", "headline", "token", "direction", "confidence", "expectedMovesPct", "timeHorizon", "surpriseScore", "rationale", "entryNotes", "riskNotes"],
     },
   },
 ];
@@ -62,15 +60,16 @@ export async function generateSignals(newsItems: NewsItem[]): Promise<TradeSigna
   if (newsItems.length === 0) return [];
 
   const signals: TradeSignal[] = [];
+  const byId = new Map(newsItems.map((item) => [item.id, item]));
 
   const messages: Anthropic.MessageParam[] = [
     {
       role: "user",
-      content: `${newsItems.length} news items queued. Analyze each one and submit trading signals for events with confidence >= ${config.MIN_CONFIDENCE}. Skip noise. Max ${config.MAX_SIGNALS_PER_CYCLE} signals this cycle.`,
+      content: `${newsItems.length} catalyst items queued. Submit only signals with confidence >= ${config.MIN_CONFIDENCE}. Max ${config.MAX_SIGNALS_PER_CYCLE} signals this cycle.`,
     },
   ];
 
-  for (let i = 0; i < 14; i++) {
+  for (let iteration = 0; iteration < 14; iteration++) {
     const response = await client.messages.create({
       model: config.CLAUDE_MODEL,
       max_tokens: 2048,
@@ -91,15 +90,14 @@ export async function generateSignals(newsItems: NewsItem[]): Promise<TradeSigna
 
       switch (block.name) {
         case "get_news_batch":
-          result = newsItems.map((n) => ({
-            id: n.id,
-            title: n.title,
-            summary: n.summary,
-            source: n.source,
-            category: n.category,
-            tokens: n.tokens,
-            sentiment: n.rawSentiment,
-            age: `${Math.round((Date.now() - n.publishedAt) / 60000)}m ago`,
+          result = newsItems.map((item) => ({
+            id: item.id,
+            title: item.title,
+            category: item.category,
+            tokens: item.tokens,
+            contaminationScore: Number(getContaminationScore(item).toFixed(2)),
+            halfLifeMinutes: getHalfLifeMinutes(item),
+            ageMinutes: Math.round((Date.now() - item.publishedAt) / 60000),
           }));
           break;
 
@@ -107,39 +105,45 @@ export async function generateSignals(newsItems: NewsItem[]): Promise<TradeSigna
           const input = block.input as { symbol: string };
           result = {
             symbol: input.symbol,
-            note: "Live price data not available — reason based on news content and category",
-            tier: ["BTC", "ETH", "SOL", "BNB"].includes(input.symbol) ? "large-cap" : "mid-small-cap",
+            tier: ["BTC", "ETH", "SOL"].includes(input.symbol) ? "large-cap" : "mid-small-cap",
+            note: "Reason from catalyst quality and category path, not generic sentiment.",
           };
           break;
         }
 
         case "get_similar_past_events": {
-          const input = block.input as { category: string; token?: string };
+          const input = block.input as { category: string };
           const examples: Record<string, string> = {
-            hack: "Typical immediate drop of 15-40% on exploit news, partial recovery over 24-72h if funds recovered",
-            listing: "Binance listing historically +20-60% in first hour, Coinbase +10-30%",
-            regulation: "SEC action -10-25% immediate, recovery depends on jurisdiction and scope",
-            funding: "Large VC round +5-15% over 24h, higher for early-stage projects",
-            macro: "Fed hawkish surprise: BTC -3-8%, alts -5-15% within 1h of announcement",
-            partnership: "Depends on partner tier — Tier 1 company +10-20%, unknown entity <2%",
+            hack: "Immediate shock usually hits in the first 10-30 minutes, then reflex bounce if loss scope shrinks.",
+            listing: "Impact is front-loaded; confirmation plus first pullback often matter more than headline itself.",
+            regulation: "Half-life is longer because positioning reprices over hours, not seconds.",
+            unlock: "Supply overhang often bleeds before and after the event unless offset by strong demand.",
+            governance: "Token reaction depends on whether the vote changes fees, emissions, or treasury use.",
           };
-          result = { category: input.category, historicalContext: examples[input.category] ?? "Limited historical data" };
+          result = { category: input.category, historicalContext: examples[input.category] ?? "Limited historical analogs." };
           break;
         }
 
         case "submit_signal": {
-          const input = block.input as Omit<TradeSignal, "id" | "generatedAt" | "expired">;
+          const input = block.input as Omit<TradeSignal, "id" | "generatedAt" | "expired" | "eventHalfLifeMinutes" | "contaminationScore">;
+          const news = byId.get(input.newsId);
+          if (!news) {
+            result = { accepted: false, reason: "news item missing" };
+            break;
+          }
           if (input.confidence >= config.MIN_CONFIDENCE && signals.length < config.MAX_SIGNALS_PER_CYCLE) {
             const signal: TradeSignal = {
               ...input,
               id: randomUUID(),
               generatedAt: Date.now(),
               expired: false,
+              eventHalfLifeMinutes: getHalfLifeMinutes(news),
+              contaminationScore: Number(getContaminationScore(news).toFixed(2)),
             };
             signals.push(signal);
             const arrow = signal.direction === "bullish" ? "↑" : signal.direction === "bearish" ? "↓" : "→";
-            logger.info(`[SIGNAL] ${arrow} ${signal.token} | ${signal.direction.toUpperCase()} | conf ${signal.confidence.toFixed(2)} | ${signal.timeHorizon} | est ${signal.expectedMovesPct > 0 ? "+" : ""}${signal.expectedMovesPct}%`);
-            logger.info(`  → ${signal.rationale}`);
+            logger.info(`[SIGNAL] ${arrow} ${signal.token} | conf ${signal.confidence.toFixed(2)} | half-life ${signal.eventHalfLifeMinutes}m | surprise ${signal.surpriseScore.toFixed(2)}`);
+            logger.info(`  -> ${signal.rationale}`);
           }
           result = { accepted: true };
           break;
