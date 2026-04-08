@@ -10,6 +10,7 @@ Framework:
 Prefer:
 - confirmed hacks, listings, governance decisions, unlock announcements, and regulatory actions
 - events where a token-specific thesis is clear
+- catalysts that are still early enough to matter after the first distribution wave
 
 Avoid:
 - circular rumor loops

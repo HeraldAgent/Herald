@@ -24,7 +24,7 @@ async function scan() {
 
   const lead = ranked[0];
   if (lead) {
-    logger.info(`Lead catalyst: ${lead.category} | half-life ${getHalfLifeMinutes(lead)}m | contamination ${getContaminationScore(lead).toFixed(2)}`);
+    logger.info(`Lead tape item: ${lead.category} | half-life ${getHalfLifeMinutes(lead)}m | contamination ${getContaminationScore(lead).toFixed(2)}`);
   }
 
   const topItems = ranked.slice(0, 10);
