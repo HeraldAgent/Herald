@@ -1,6 +1,6 @@
 {
   "name": "herald",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "News-to-trade signal engine — scans crypto news and generates actionable trade signals using Claude",
   "license": "MIT",
   "repository": {
@@ -32,6 +32,12 @@
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   },
+  "keywords": [
+    "crypto-news",
+    "catalyst-tape",
+    "solana",
+    "event-driven"
+  ],
   "engines": {
     "node": ">=20.0.0",
     "bun": ">=1.2.0"
