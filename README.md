@@ -14,6 +14,8 @@ Catch the headlines that still have edge after the market sees them.
 ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square)
 
+Catalyst Board • Tape Ticket • Operating Surfaces • Real Edge • Technical Spec • Quick Start
+
 ## Catalyst Board
 
 ![Herald catalyst board](assets/preview-dashboard.svg)
@@ -28,6 +30,12 @@ Catch the headlines that still have edge after the market sees them.
 - `Tape Ticket`: prints the exact event, half-life, and action bias
 - `Decay Model`: tracks how fast each category loses edge after publication
 - `Contamination Filter`: blocks rumor loops and over-distributed stories from ranking too high
+
+## What Herald Does Better Than A News Feed
+
+Herald is not meant to tell you what happened. It is meant to tell you whether what happened still has any tradable life left in it.
+
+That requires a stricter view of timing than most crypto news products take. A headline can be real and still be useless if it has already been distributed through too many channels, repeated by too many low-quality accounts, or delayed too long for the category.
 
 ## What Herald Treats As Real Edge
 
@@ -44,6 +52,20 @@ Herald should often do nothing.
 - if the event category decays fast, the half-life window closes
 
 A silent tape is better than a noisy one that promotes dead edge.
+
+## How The Board Should Be Read
+
+### Freshness
+
+The same headline means different things at 3 minutes, 30 minutes, and 3 hours depending on category. Herald keeps that timing discipline explicit.
+
+### Surprise
+
+A genuinely surprising event can still matter after social media has seen it. A routine headline with no real surprise usually should not.
+
+### Contamination
+
+This is where most junk gets filtered out. Rumor phrasing, anonymous sourcing, repetitive token stuffing, and social echo loops all raise contamination fast.
 
 ## Technical Spec
 
@@ -80,6 +102,14 @@ Higher contamination reduces ranking and conviction.
 `impact = categoryWeight + abs(rawSentiment) * 2 - contaminationScore * 3`
 
 This keeps strong structural catalysts above hype headlines.
+
+## Example Categories Herald Cares About
+
+- exchange listings that materially change access
+- unlock schedules that alter supply pressure
+- governance or fee changes that affect token economics
+- hacks and security failures with immediate repricing impact
+- regulatory or macro headlines that change the market regime
 
 ## Why Operators Keep It Open
 
