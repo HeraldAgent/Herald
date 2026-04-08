@@ -1,8 +1,9 @@
+import "dotenv/config";
 import { z } from "zod";
 
 const schema = z.object({
   ANTHROPIC_API_KEY: z.string().min(1),
-  CLAUDE_MODEL: z.string().default("claude-sonnet-4-5-20251001"),
+  CLAUDE_MODEL: z.string().default("claude-sonnet-4-6"),
   CRYPTOPANIC_API_KEY: z.string().optional(),
   SCAN_INTERVAL_MS: z.coerce.number().default(300000),      // 5 min
   MIN_CONFIDENCE: z.coerce.number().default(0.65),
