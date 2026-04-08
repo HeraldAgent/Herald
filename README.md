@@ -29,6 +29,22 @@ Catch the headlines that still have edge after the market sees them.
 - `Decay Model`: tracks how fast each category loses edge after publication
 - `Contamination Filter`: blocks rumor loops and over-distributed stories from ranking too high
 
+## What Herald Treats As Real Edge
+
+Herald is built around a simple idea: not every headline deserves to become a trading input. The system is stricter with stories that already spent their edge on social media and more generous with structurally important catalysts that still sit inside a usable half-life window.
+
+That makes the tape useful during the part of the cycle where traders need speed, not a recap feed.
+
+## When The Tape Stays Quiet
+
+Herald should often do nothing.
+
+- if a story is already over-distributed, it gets demoted
+- if sourcing is weak, contamination rises quickly
+- if the event category decays fast, the half-life window closes
+
+A silent tape is better than a noisy one that promotes dead edge.
+
 ## Technical Spec
 
 Herald ranks news with three practical questions:
@@ -64,6 +80,12 @@ Higher contamination reduces ranking and conviction.
 `impact = categoryWeight + abs(rawSentiment) * 2 - contaminationScore * 3`
 
 This keeps strong structural catalysts above hype headlines.
+
+## Why Operators Keep It Open
+
+Most crypto news products are built to tell you what happened. Herald is built to tell you whether there is still anything left to do.
+
+That difference is what makes it worth keeping on-screen.
 
 ## Quick Start
 
