@@ -1,7 +1,7 @@
 {
   "name": "herald",
   "version": "0.1.1",
-  "description": "News-to-trade signal engine — scans crypto news and generates actionable trade signals using Claude",
+  "description": "Catalyst tape for crypto headlines that scores surprise, half-life, and contamination risk",
   "license": "MIT",
   "repository": {
     "type": "git",
