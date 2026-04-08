@@ -46,6 +46,10 @@ describe("helpers", () => {
     expect(getHalfLifeMinutes({ ...base, category: "hack" })).toBe(45);
   });
 
+  it("assigns a longer half-life to unlock paths", () => {
+    expect(getHalfLifeMinutes({ ...base, category: "unlock" })).toBe(360);
+  });
+
   it("scores rumors as contaminated", () => {
     const rumor = { ...base, title: "Rumor: unconfirmed BONK listing speculation", summary: "anonymous chatter" };
     expect(getContaminationScore(rumor)).toBeGreaterThan(0.4);
