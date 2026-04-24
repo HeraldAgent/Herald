@@ -27,12 +27,12 @@ export function deduplicateNews(items: NewsItem[]): NewsItem[] {
 }
 
 export function filterRelevantNews(items: NewsItem[]): NewsItem[] {
-  const tracked = new Set(getTrackedTokens());
+  const tracked = new Set(getTrackedTokens().map((token) => token.toUpperCase()));
   const cutoff = Date.now() - 3 * 3600 * 1000;
 
   return items.filter((item) => {
     if (item.publishedAt < cutoff) return false;
-    const hasTrackedToken = item.tokens.some((token) => tracked.has(token));
+    const hasTrackedToken = item.tokens.some((token) => tracked.has(token.toUpperCase()));
     const structuralEvent = ["hack", "regulation", "macro", "unlock", "governance"].includes(item.category);
     return hasTrackedToken || structuralEvent;
   });

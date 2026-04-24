@@ -19,6 +19,11 @@ describe("filterRelevantNews", () => {
     expect(filterRelevantNews([base])).toHaveLength(1);
   });
 
+  it("matches tracked token symbols case-insensitively", () => {
+    const lower = { ...base, id: "lower_1", tokens: ["sol"] };
+    expect(filterRelevantNews([lower])).toHaveLength(1);
+  });
+
   it("removes items older than 3 hours", () => {
     const old = { ...base, id: "old_1", publishedAt: Date.now() - 4 * 3600000 };
     expect(filterRelevantNews([old])).toHaveLength(0);
