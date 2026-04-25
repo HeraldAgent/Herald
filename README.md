@@ -14,7 +14,7 @@ Catch the headlines that still have edge after the market sees them.
 ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square)
 
-Live Catalyst Tape • Tape Ticket • Operating Surfaces • Real Edge • Technical Spec • Quick Start
+Live Catalyst Tape • Operating Surfaces • Real Edge • Technical Spec • Quick Start
 
 ## At a Glance
 
@@ -28,10 +28,6 @@ Live Catalyst Tape • Tape Ticket • Operating Surfaces • Real Edge • Tech
 <img src="assets/preview-main.png" alt="Herald Live Catalyst Tape" width="100%" />
 
 Live operating view for Herald: ranked catalyst tape across crypto news headlines, selected ticket with impact-build math, half-life decay, raw headline feed, guardrails, and the agent's current ACTIONABLE, ACTIVE, CONTESTED, FADE, or SUPPRESS decision.
-
-## Tape Ticket
-
-![Herald terminal](assets/preview-terminal.svg)
 
 ## Operating Surfaces
 
