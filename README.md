@@ -14,7 +14,7 @@ Catch the headlines that still have edge after the market sees them.
 ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square)
 
-Catalyst Board • Tape Ticket • Operating Surfaces • Real Edge • Technical Spec • Quick Start
+Live Catalyst Tape • Tape Ticket • Operating Surfaces • Real Edge • Technical Spec • Quick Start
 
 ## At a Glance
 
@@ -23,9 +23,11 @@ Catalyst Board • Tape Ticket • Operating Surfaces • Real Edge • Technica
 - `Primary failure mode`: promoting headlines after the edge has already been distributed
 - `Best for`: operators who need to know whether a story still has anything left to do
 
-## Catalyst Board
+## Live Catalyst Tape
 
-![Herald catalyst board](assets/preview-dashboard.svg)
+<img src="assets/preview-main.png" alt="Herald Live Catalyst Tape" width="100%" />
+
+Live operating view for Herald: ranked catalyst tape across crypto news headlines, selected ticket with impact-build math, half-life decay, raw headline feed, guardrails, and the agent's current ACTIONABLE, ACTIVE, CONTESTED, FADE, or SUPPRESS decision.
 
 ## Tape Ticket
 
